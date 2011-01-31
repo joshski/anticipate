@@ -18,7 +18,7 @@ module Anticipate
     private
     
     def seconds(amount)
-      amount == 1 ? "1 second" : "#{tries} seconds"
+      amount == 1 ? "1 second" : "#{amount} seconds"
     end
   end
 end

@@ -31,13 +31,25 @@ module Anticipate
       end
         
       describe "when the block always raises" do
-        it "raises a TimeoutError, with the last error message" do
-          tries = 0
-          lambda {
-            @anticipator.anticipate(1,2) { raise (tries += 1).to_s }
-          }.should raise_error(TimeoutError,
-                    "Timed out after 2 tries (tried every 1 second)\n3")
-        end    
+        describe "when waiting for one second" do        
+          it "raises a TimeoutError, with the last error message" do
+            tries = 0
+            lambda {
+              @anticipator.anticipate(1,2) { raise (tries += 1).to_s }
+            }.should raise_error(TimeoutError,
+                      "Timed out after 2 tries (tried every 1 second)\n3")
+          end
+        end
+        
+        describe "when waiting for any other number of seconds" do
+          it "raises a TimeoutError, with the last error message" do
+            tries = 0
+            lambda {
+              @anticipator.anticipate(2,3) { raise (tries += 1).to_s }
+            }.should raise_error(TimeoutError,
+                      "Timed out after 3 tries (tried every 2 seconds)\n4")
+          end
+        end
       end
       
       describe "when the block never raises" do
