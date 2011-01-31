@@ -1,0 +1,26 @@
+= Anticipate
+
+== About
+
+Anticipate is a fluent interface for retrying blocks of code:
+  
+  trying_every(3).seconds.failing_after(9).tries do
+  
+    # Repeatedly calls block until it stops raising errors
+    
+  end
+  
+The Anticipate module allows the following expressions:
+
+  trying_every(n).seconds {}
+  failing_after(n).tries {}
+  trying_every(x).seconds.failing_after(y).tries {}
+  
+Blocks should contain an assertion, i.e. raise a
+descriptive error if some condition is unsatisfied. On
+the last iteration, the error will be wrapped in a
+TimeoutError and re-raised.
+
+I'm aware of a couple of gems supporting the
+begin-rescue-sleep-retry dance, namely 'retry' and 'attempt'.
+The aim of this library is to offer more expressive syntax.
