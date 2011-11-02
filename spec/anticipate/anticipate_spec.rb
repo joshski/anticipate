@@ -31,6 +31,24 @@ module Anticipate
       end
     end
     
+    describe "sleeping(n).seconds.between_tries" do
+      it "yields" do
+        called = false
+        sleeping(1).seconds.between_tries { called = true }
+        called.should be_true        
+      end
+      
+      it "overrides the interval" do
+        @anticipator.should_receive(:anticipate).with(77, anything)
+        trying_every(77).seconds {}
+      end
+      
+      it "uses the default timeout" do
+        @anticipator.should_receive(:anticipate).with(anything, default_tries)
+        trying_every(88).seconds {}
+      end
+    end
+    
     describe "failing_after(n).tries" do
       it "yields" do
         called = false
@@ -57,13 +75,13 @@ module Anticipate
       end
       
       it "overrides the timeout" do
-        @anticipator.should_receive(:anticipate).with(anything, 222)
-        failing_after(222).tries.trying_every(111).seconds {}
+        @anticipator.should_receive(:anticipate).with(anything, 1)
+        failing_after(anything).tries.trying_every(1).seconds {}
       end
       
       it "overrides the interval" do
-        @anticipator.should_receive(:anticipate).with(333, anything)
-        failing_after(444).tries.trying_every(333).seconds {}
+        @anticipator.should_receive(:anticipate).with(2, anything)
+        failing_after(anything).tries.trying_every(2).seconds {}
       end
     end
     
@@ -75,13 +93,31 @@ module Anticipate
       end
       
       it "overrides the timeout" do
-        @anticipator.should_receive(:anticipate).with(anything, 666)
-        trying_every(555).seconds.failing_after(666).tries {}
+        @anticipator.should_receive(:anticipate).with(anything, 3)
+        trying_every(anything).seconds.failing_after(3).tries {}
       end
       
       it "overrides the interval" do
-        @anticipator.should_receive(:anticipate).with(777, anything)
-        trying_every(777).seconds.failing_after(888).tries {}
+        @anticipator.should_receive(:anticipate).with(4, anything)
+        trying_every(4).seconds.failing_after(anything).tries {}
+      end
+    end
+    
+    describe "sleeping(x).seconds.between_tries.failing_after(y).tries" do
+      it "yields" do
+        called = false
+        sleeping(1).seconds.between_tries.failing_after(2).tries { called = true }
+        called.should be_true
+      end
+      
+      it "overrides the timeout" do
+        @anticipator.should_receive(:anticipate).with(anything, 5)
+        sleeping(anything).seconds.between_tries.failing_after(5).tries {}
+      end
+      
+      it "overrides the interval" do
+        @anticipator.should_receive(:anticipate).with(6, anything)
+        trying_every(6).seconds.failing_after(anything).tries {}
       end
     end
   end
