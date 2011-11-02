@@ -4,13 +4,12 @@ module Anticipate
   describe Anticipate do
     include Anticipate
     
-    before do
-      @anticipator = mock("anticipator")
-      @anticipator.stub!(:anticipate).and_yield
+    let :anticipator do
+      mock("anticipator")
     end
     
-    def anticipator
-      @anticipator
+    before do
+      anticipator.stub!(:anticipate).and_yield
     end
     
     describe "trying_every(n).seconds" do
@@ -21,12 +20,12 @@ module Anticipate
       end
       
       it "overrides the interval" do
-        @anticipator.should_receive(:anticipate).with(55, anything)
+        anticipator.should_receive(:anticipate).with(55, anything)
         trying_every(55).seconds {}
       end
       
       it "uses the default timeout" do
-        @anticipator.should_receive(:anticipate).with(anything, default_tries)
+        anticipator.should_receive(:anticipate).with(anything, default_tries)
         trying_every(66).seconds {}
       end
     end
@@ -39,12 +38,12 @@ module Anticipate
       end
       
       it "overrides the interval" do
-        @anticipator.should_receive(:anticipate).with(77, anything)
+        anticipator.should_receive(:anticipate).with(77, anything)
         trying_every(77).seconds {}
       end
       
       it "uses the default timeout" do
-        @anticipator.should_receive(:anticipate).with(anything, default_tries)
+        anticipator.should_receive(:anticipate).with(anything, default_tries)
         trying_every(88).seconds {}
       end
     end
@@ -57,12 +56,12 @@ module Anticipate
       end
       
       it "overrides the timeout" do
-        @anticipator.should_receive(:anticipate).with(anything, 77)
+        anticipator.should_receive(:anticipate).with(anything, 77)
         failing_after(77).tries {}
       end
       
       it "uses the default interval" do
-        @anticipator.should_receive(:anticipate).with(default_interval, anything)
+        anticipator.should_receive(:anticipate).with(default_interval, anything)
         failing_after(88).tries {}
       end
     end
@@ -75,12 +74,12 @@ module Anticipate
       end
       
       it "overrides the timeout" do
-        @anticipator.should_receive(:anticipate).with(anything, 1)
+        anticipator.should_receive(:anticipate).with(anything, 1)
         failing_after(anything).tries.trying_every(1).seconds {}
       end
       
       it "overrides the interval" do
-        @anticipator.should_receive(:anticipate).with(2, anything)
+        anticipator.should_receive(:anticipate).with(2, anything)
         failing_after(anything).tries.trying_every(2).seconds {}
       end
     end
@@ -93,12 +92,12 @@ module Anticipate
       end
       
       it "overrides the timeout" do
-        @anticipator.should_receive(:anticipate).with(anything, 3)
+        anticipator.should_receive(:anticipate).with(anything, 3)
         trying_every(anything).seconds.failing_after(3).tries {}
       end
       
       it "overrides the interval" do
-        @anticipator.should_receive(:anticipate).with(4, anything)
+        anticipator.should_receive(:anticipate).with(4, anything)
         trying_every(4).seconds.failing_after(anything).tries {}
       end
     end
@@ -111,12 +110,12 @@ module Anticipate
       end
       
       it "overrides the timeout" do
-        @anticipator.should_receive(:anticipate).with(anything, 5)
+        anticipator.should_receive(:anticipate).with(anything, 5)
         sleeping(anything).seconds.between_tries.failing_after(5).tries {}
       end
       
       it "overrides the interval" do
-        @anticipator.should_receive(:anticipate).with(6, anything)
+        anticipator.should_receive(:anticipate).with(6, anything)
         trying_every(6).seconds.failing_after(anything).tries {}
       end
     end

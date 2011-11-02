@@ -83,7 +83,7 @@ module Anticipate
       end
 
       def sleeping(amount)
-        Sleeping.new(@anticipator, @interval, amount)
+        Sleeping.new(@anticipator, amount, @timeout)
       end
     end
     

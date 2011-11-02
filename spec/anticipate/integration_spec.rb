@@ -7,7 +7,7 @@ module Anticipate
     it "raises when a block continually raises" do
       raises = []
       lambda {
-        trying_every(0.01).seconds.failing_after(5).tries {
+        sleeping(0.01).seconds.between_tries.failing_after(5).tries {
           raise (raises << Time.now).to_s
         }
       }.should raise_error(TimeoutError)
@@ -20,7 +20,7 @@ module Anticipate
     it "continues when a block stops raising" do
       raises = 0
       lambda {
-        trying_every(0.01).seconds.failing_after(3).tries {
+        sleeping(0.01).seconds.between_tries.failing_after(3).tries {
           raise (raises += 1).to_s unless raises == 2
         }
       }.should_not raise_error
