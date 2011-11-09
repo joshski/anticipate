@@ -20,4 +20,28 @@ Blocks should contain an assertion, i.e. raise a descriptive error if some condi
 
 The first try is attempted immediately, there is no sleep before the first yield.
 
+== Defining your own timings
+
+If lots of your code needs to wait for things to happen, you might consider defining your own timing module, e.g:
+
+module Timing
+  include Anticipate
+  
+  def very_soon
+    sleeping(0.1).seconds.between_tries.failing_after(10).tries do
+      yield
+    end
+  end
+  
+  def eventually
+    sleeping(2).seconds.between_tries.failing_after(5).tries do
+      yield
+    end
+  end
+end
+
+...that way you can adjust timing details in one place as the system grows.
+
+== Alternatives
+
 I'm aware of a couple of gems performing the begin-rescue-sleep-retry dance, namely 'retry' and 'attempt'. The aim of this library is to offer more expressive syntax.
