@@ -24,21 +24,21 @@ The first try is attempted immediately, there is no sleep before the first yield
 
 If lots of your code needs to wait for things to happen, you might consider defining your own timing module, e.g:
 
-module Timing
-  include Anticipate
+  module Timing
+    include Anticipate
   
-  def very_soon
-    sleeping(0.1).seconds.between_tries.failing_after(10).tries do
-      yield
+    def very_soon
+      sleeping(0.1).seconds.between_tries.failing_after(10).tries do
+        yield
+      end
+    end
+  
+    def eventually
+      sleeping(2).seconds.between_tries.failing_after(5).tries do
+        yield
+      end
     end
   end
-  
-  def eventually
-    sleeping(2).seconds.between_tries.failing_after(5).tries do
-      yield
-    end
-  end
-end
 
 ...that way you can adjust timing details in one place as the system grows.
 
