@@ -10,7 +10,7 @@ module Anticipate
     
     describe "#anticipate" do
       
-      describe "when the block eventually stops raising" do
+      describe "when the block eventually stops raising a StandardError" do
         it "sleeps the given interval between tries" do
           @sleeper.should_receive(:sleep).with(1).exactly(8).times
           tries = 0
@@ -28,6 +28,19 @@ module Anticipate
             end
           }.should_not raise_error
         end
+      end
+      
+      describe "when the block eventually stops raising an Exception (that is not a StandardError)" do
+        
+        it "sleeps the given interval between tries" do
+          @sleeper.should_receive(:sleep).with(1).exactly(8).times
+          tries = 0
+          @anticipator.anticipate(1,9) do
+            raise Exception.new unless (tries += 1) == 9
+          end
+          tries.should == 9
+        end
+        
       end
         
       describe "when the block always raises" do

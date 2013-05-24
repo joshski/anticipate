@@ -11,7 +11,7 @@ module Anticipate
       begin
         yield
         return
-      rescue => e
+      rescue Exception => e
         if (count += 1) == tries
           raise TimeoutError.new(interval, tries, e)
         end

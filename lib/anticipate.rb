@@ -5,7 +5,7 @@ require 'anticipate/anticipator'
 require 'anticipate/dsl'
 
 module Anticipate
-  VERSION = '0.0.2'
+  VERSION = '0.1.0'
   
   include DSL
 end
