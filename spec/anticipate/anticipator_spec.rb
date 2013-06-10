@@ -28,6 +28,14 @@ module Anticipate
             end
           }.should_not raise_error
         end
+        
+        it "returns what the block returns" do
+          tries = 0
+          @anticipator.anticipate(1,2) do
+            raise "fail" unless (tries += 1) == 2
+            "dude, don't forget me!"
+          end.should == "dude, don't forget me!"
+        end
       end
       
       describe "when the block eventually stops raising an Exception (that is not a StandardError)" do
@@ -71,6 +79,12 @@ module Anticipate
             @anticipator.anticipate(1,2) do
             end
           }.should_not raise_error
+        end
+        
+        it "returns what the block returns" do
+          @anticipator.anticipate(1,2) do
+            "dude, don't forget me!"
+          end.should == "dude, don't forget me!"
         end
       end
     end
